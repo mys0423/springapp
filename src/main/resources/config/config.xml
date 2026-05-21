@@ -19,11 +19,15 @@
 
         <!-- 커뮤니티 dto -->
         <typeAlias type="com.app.springapp.domain.dto.request.PostLikeRequestDTO" alias="PostLikeRequestDTO"/>
-        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
-
+        <typeAlias type="com.app.springapp.domain.dto.request.ReplyLikeRequestDTO" alias="ReplyLikeRequestDTO"/>
         <typeAlias type="com.app.springapp.domain.dto.request.PostReadRequestDTO" alias="PostReadRequestDTO"/>
-        <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
 
-        <typeAlias type="com.app.springapp.domain.dto.response.ReplyResponseDTO" alias="RereplyResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostLikeResponseDTO" alias="PostLikeResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.ReplyLikeResponseDTO" alias="ReplyLikeResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.PostResponseDTO" alias="PostResponseDTO"/>
+        <typeAlias type="com.app.springapp.domain.dto.response.RereplyResponseDTO" alias="RereplyResponseDTO"/>
+
+        <typeAlias type="com.app.springapp.domain.dto.ReplyDTO" alias="ReplyDTO"/>
+
     </typeAliases>
 </configuration>
