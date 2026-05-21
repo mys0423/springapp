@@ -1,16 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.app.springapp.mapper.PostMapper">
-    <insert id="insert" parameterType="PostVO">
-        INSERT INTO TBL_POST
-        VALUES (SEQ_POST.NEXTVAL, #{postTitle}, #{postContent}, CURRENT_TIMESTAMP, 0, #{memberId}, #{categoryId})
-    </insert>
-
-    <select id="selectById" parameterType="Long" resultType="PostVO">
-        SELECT ID, POST_TITLE, POST_CONTENT, POST_CREATED_AT, POST_READ_COUNT, MEMBER_ID, CATEGORY_ID
-        FROM TBL_POST
-        WHERE ID = #{id}
-    </select>
 
     <select id="selectByMemberIdAndId" parameterType="PostReadRequestDTO" resultType="PostResponseDTO">
         SELECT
