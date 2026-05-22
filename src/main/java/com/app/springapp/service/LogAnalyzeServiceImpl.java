@@ -78,7 +78,7 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
             log.warn("Python LangChain server failed or unreachable. Falling back to Spring Boot OpenAI API...", ex);
             // 3. Fallback: Spring Boot에서 직접 OpenAI 호출
             try {
-                OpenAiService openAiService = new OpenAiService(openAiApiKey);
+                OpenAiService openAiService = new OpenAiService(openAiApiKey, java.time.Duration.ofSeconds(60));
                 
                 String guideline = LogPromptConstants.getStyleGuideline((String) payload.get("style"));
                 String systemPrompt = LogPromptConstants.getSystemTemplate(guideline);
@@ -102,6 +102,18 @@ public class LogAnalyzeServiceImpl implements LogAnalyzeService {
 
                 String aiResponseStr = openAiService.createChatCompletion(completionRequest)
                         .getChoices().get(0).getMessage().getContent();
+                
+                // 마크다운 블록 제거 (혹시 gpt-4o-mini가 json_object 모드 없이 마크다운으로 감싸서 응답할 경우 대비)
+                if (aiResponseStr.startsWith("```json")) {
+                    aiResponseStr = aiResponseStr.substring(7);
+                }
+                if (aiResponseStr.startsWith("```")) {
+                    aiResponseStr = aiResponseStr.substring(3);
+                }
+                if (aiResponseStr.endsWith("```")) {
+                    aiResponseStr = aiResponseStr.substring(0, aiResponseStr.length() - 3);
+                }
+                aiResponseStr = aiResponseStr.trim();
                 
                 aiResult = objectMapper.readValue(aiResponseStr, LangchainResponseDTO.class);
 
