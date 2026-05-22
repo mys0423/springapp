@@ -17,4 +17,7 @@ public class GuestbookCreateRequestDTO {
 
     @Schema(description = "방명록 내용 (최대 1000자)", example = "항상 좋은 글 감사합니다!", required = true)
     private String guestbookContent;
+
+    @Schema(description = "방명록 작성자 ID", example = "1", required = true)
+    private Long writerMemberId;
 }
