@@ -77,4 +77,14 @@
         SELECT COUNT(*) AS POST_COUNT FROM TBL_POST
         WHERE MEMBER_ID = #{id}
     </select>
+
+
+    <!-- 게시글 작성 -->
+    <insert id="insert" parameterType="PostCreateDTO">
+        <selectKey resultType="Long" order="BEFORE" keyProperty="id">
+            SELECT SEQ_POST.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO TBL_POST(ID, POST_TITLE, POST_CONTENT, MEMBER_ID, CATEGORY_ID)
+        VALUES (#{id}, #{postTitle}, #{postContent}, #{memberId}, #{categoryId})
+    </insert>
 </mapper>

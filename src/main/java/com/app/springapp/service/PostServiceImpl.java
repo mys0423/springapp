@@ -1,10 +1,8 @@
 package com.app.springapp.service;
 
+import com.app.springapp.domain.dto.PostCreateDTO;
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
-import com.app.springapp.domain.dto.response.PostAfterResponseDTO;
-import com.app.springapp.domain.dto.response.PostBeforeResponseDTO;
-import com.app.springapp.domain.dto.response.PostReadResponseDTO;
-import com.app.springapp.domain.dto.response.PostResponseDTO;
+import com.app.springapp.domain.dto.response.*;
 import com.app.springapp.exception.PostException;
 import com.app.springapp.repository.PostDAO;
 import lombok.RequiredArgsConstructor;
@@ -65,6 +63,18 @@ public class PostServiceImpl implements PostService {
         postReadResponseDTO.setMemberReplyCount(replyService.countReply(memberId));
 
         return postReadResponseDTO;
+    }
+
+    //게시글 작성 (PostCreateResponseDTO는 새로 작성된 게시글 번호정보가 들어있다.)
+    @Override
+    public PostCreateResponseDTO writePost(PostCreateDTO postCreateDTO) {
+
+        postDAO.save(postCreateDTO);
+
+        PostCreateResponseDTO postCreateResponseDTO = new PostCreateResponseDTO();
+        postCreateResponseDTO.setPostId(postCreateDTO.getId());
+
+        return postCreateResponseDTO;
     }
 
 
