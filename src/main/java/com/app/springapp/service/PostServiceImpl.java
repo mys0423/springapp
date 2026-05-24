@@ -2,7 +2,9 @@ package com.app.springapp.service;
 
 import com.app.springapp.domain.dto.PostCreateDTO;
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
+import com.app.springapp.domain.dto.request.PostUpdateRequestDTO;
 import com.app.springapp.domain.dto.response.*;
+import com.app.springapp.domain.vo.PostVO;
 import com.app.springapp.exception.PostException;
 import com.app.springapp.repository.PostDAO;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +26,13 @@ public class PostServiceImpl implements PostService {
     //게시글 id로 게시글 정보 불러오기 + (memberId로 해당 게시글 좋아요 여부확인 가능)
     //게시글 리스트, 게시글 열람페이지에서 사용된다.
     @Override
-    public PostResponseDTO FindPost(PostReadRequestDTO postReadRequestDTO) {
+    public PostResponseDTO findPost(PostReadRequestDTO postReadRequestDTO) {
         return postDAO.findById(postReadRequestDTO).orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
+    }
+
+    @Override
+    public PostVO findPost(Long id) {
+        return postDAO.find(id).orElseThrow(() -> new PostException("게시글을 찾지 못했습니다.", HttpStatus.NOT_FOUND));
     }
 
     // POST ID로 이전글 찾기
@@ -51,7 +58,7 @@ public class PostServiceImpl implements PostService {
     public PostReadResponseDTO getPostDetailInfo(PostReadRequestDTO postReadRequestDTO) {
         PostReadResponseDTO postReadResponseDTO = new PostReadResponseDTO();
 
-        postReadResponseDTO.setPost(FindPost(postReadRequestDTO));  //게시글 정보 저장
+        postReadResponseDTO.setPost(findPost(postReadRequestDTO));  //게시글 정보 저장
         postReadResponseDTO.setReplies(replyService.getPostReplies(postReadRequestDTO));    //게시글에 달린 댓글 정보(대댓글포함) 저장
 //        postReadResponseDTO.setPostPictures(postPictureService.findAll(postReadRequestDTO.getPostId()));    //게시글 첨부 이미지 목록 저장
         postReadResponseDTO.setBeforePost(findBeforePost(postReadRequestDTO.getPostId()));  //이전글 정보 저장
@@ -77,5 +84,9 @@ public class PostServiceImpl implements PostService {
         return postCreateResponseDTO;
     }
 
-
+    //게시글 수정
+    @Override
+    public void updatePost(PostUpdateRequestDTO postUpdateRequestDTO) {
+        postDAO.update(postUpdateRequestDTO);
+    }
 }

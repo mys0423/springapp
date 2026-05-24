@@ -31,7 +31,7 @@ public class PostAPI {
 
     //게시글 열람
     @PostMapping("/read")
-    @Operation(summary = "게시글 열람 서비스", description = "게시글을 열람하는 서비스")
+    @Operation(summary = "게시글 열람 서비스(좋아요, 좋아요여부포함)", description = "게시글을 열람하는 서비스")
     @ApiResponse(responseCode = "201", description = "게시글 열람 완료")
     @ApiResponse(responseCode = "400", description = "잘못된 요청")
     public ResponseEntity<ApiResponseDTO> readPost(@RequestBody PostReadRequestDTO postReadRequestDTO) {
@@ -42,6 +42,30 @@ public class PostAPI {
                         true,
                         "게시글 읽기 성공",
                         postService.getPostDetailInfo(postReadRequestDTO)));
+    }
+
+    //게시글 열람 (기본 게시글만)
+    @GetMapping("/read/{id}")
+    @Operation(summary = "게시글 열람 서비스", description = "게시글을 열람하는 서비스")
+    @ApiResponse(responseCode = "200", description = "게시글 열람 완료")
+    @ApiResponse(responseCode = "404", description = "게시글 없음")
+    @Parameter(
+            name = "id",
+            description = "게시글 번호",
+            required = true,
+            in = ParameterIn.PATH,
+            example = "1",
+            schema = @Schema(type = "number")
+    )
+    public ResponseEntity<ApiResponseDTO> readPostById(@PathVariable Long id) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponseDTO.of(
+                        true,
+                        "게시글 열람 성공",
+                                postService.findPost(id))
+                        );
     }
 
     //게시글 추가
@@ -59,6 +83,22 @@ public class PostAPI {
                         true,
                         "게시글 작성 성공",
                         postService.writePost(postCreateDTO)));
+    }
+
+    //게시글 수정
+    @PutMapping("/update")
+    @Operation(summary = "게시글 수정 서비스", description = "게시글 수정 서비스")
+    @ApiResponse(responseCode = "201", description = "게시글 수정 완료")
+    @ApiResponse(responseCode = "400", description = "잘못된 요청")
+    public ResponseEntity<ApiResponseDTO> writePost(@RequestBody PostUpdateRequestDTO postUpdateRequestDTO) {
+
+        postService.updatePost(postUpdateRequestDTO);
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(ApiResponseDTO.of(
+                        true,
+                        "게시글 수정 성공"));
     }
 
 

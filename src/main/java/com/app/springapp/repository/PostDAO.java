@@ -2,9 +2,11 @@ package com.app.springapp.repository;
 
 import com.app.springapp.domain.dto.PostCreateDTO;
 import com.app.springapp.domain.dto.request.PostReadRequestDTO;
+import com.app.springapp.domain.dto.request.PostUpdateRequestDTO;
 import com.app.springapp.domain.dto.response.PostAfterResponseDTO;
 import com.app.springapp.domain.dto.response.PostBeforeResponseDTO;
 import com.app.springapp.domain.dto.response.PostResponseDTO;
+import com.app.springapp.domain.vo.PostVO;
 import com.app.springapp.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -21,6 +23,11 @@ public class PostDAO {
     //게시글 리스트, 게시글 열람페이지에서 사용된다.
     public Optional<PostResponseDTO> findById(PostReadRequestDTO postReadRequestDTO) {
         return Optional.ofNullable(postMapper.selectById(postReadRequestDTO));
+    }
+
+    //id로 게시글 정보 불러오기
+    public Optional<PostVO> find(Long id) {
+        return Optional.ofNullable(postMapper.select(id));
     }
 
     // POST ID로 이전글 찾기
@@ -41,5 +48,10 @@ public class PostDAO {
     //게시글 작성
     public void save(PostCreateDTO postCreateDTO) {
         postMapper.insert(postCreateDTO);
+    }
+
+    //게시글 수정
+    public void update(PostUpdateRequestDTO postUpdateRequestDTO) {
+        postMapper.update(postUpdateRequestDTO);
     }
 }
