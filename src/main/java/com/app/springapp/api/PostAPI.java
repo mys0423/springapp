@@ -33,7 +33,7 @@ public class PostAPI {
     private final RereplyService rereplyService;
 
     @GetMapping("")
-    @Operation(summary = "게시글 목록 조회, 총 게시물 갯수를 알려주는 서비스", description = "게시글 목록을 조회해서 리스트로 반환하는 서비스")
+    @Operation(summary = "게시글 목록 조회", description = "검색 조건(필터, 정렬, 카테고리, 키워드)에 맞는 게시글 목록과 전체 게시글 수를 반환합니다.")
     @ApiResponse(responseCode = "200", description = "게시글 목록 조회 성공")
     @ApiResponse(responseCode = "404", description = "게시글 목록 조회 실패")
     @Parameters({
@@ -82,6 +82,7 @@ public class PostAPI {
         params.put("page", page);
         params.put("category", category);
         params.put("content", content);
+        params.put("memberId", 1L);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponseDTO.of(
                 true,
                 "게시글 목록 조회 성공",

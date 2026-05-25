@@ -15,21 +15,24 @@
         S.MEMBER_PROFILE_IMAGE_URL,
         S.CATEGORY_ID,
         S.LIKE_COUNT,
+        S.IS_LIKED,
         S.REPLY_COUNT
         FROM TBL_POST P
         JOIN (
         SELECT
-        P.ID                                                            AS POST_ID,
-        TO_CHAR(P.POST_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS')         AS POST_CREATED_AT,
+        P.ID                                                                    AS POST_ID,
+        TO_CHAR(P.POST_CREATED_AT, 'YYYY-MM-DD"T"HH24:MI:SS')                 AS POST_CREATED_AT,
         P.POST_READ_COUNT,
-        P.CATEGORY_ID,
-        M.ID                                                            AS MEMBER_ID,
+        M.ID                                                                    AS MEMBER_ID,
         M.MEMBER_NICKNAME,
         M.MEMBER_PROFILE_IMAGE_URL,
-        COUNT(DISTINCT PL.ID)                                           AS LIKE_COUNT,
-        COUNT(DISTINCT R.ID)                                            AS REPLY_COUNT
+        P.CATEGORY_ID,
+        COUNT(DISTINCT PL.ID)                                                   AS LIKE_COUNT,
+        MAX(CASE WHEN PL.MEMBER_ID = #{memberId} THEN 1 ELSE 0 END)            AS IS_LIKED,
+        COUNT(DISTINCT R.ID)                                                    AS REPLY_COUNT
         FROM TBL_POST P
         JOIN TBL_MEMBER   M  ON P.MEMBER_ID   = M.ID
+        JOIN TBL_CATEGORY C  ON P.CATEGORY_ID = C.ID
         LEFT JOIN TBL_POST_LIKE PL ON P.ID = PL.POST_ID
         LEFT JOIN TBL_REPLY     R  ON P.ID = R.POST_ID
         WHERE P.POST_DELETED_AT IS NULL
@@ -68,10 +71,10 @@
         P.ID,
         P.POST_CREATED_AT,
         P.POST_READ_COUNT,
-        P.CATEGORY_ID,
         M.ID,
         M.MEMBER_NICKNAME,
-        M.MEMBER_PROFILE_IMAGE_URL
+        M.MEMBER_PROFILE_IMAGE_URL,
+        P.CATEGORY_ID
 
         <!-- 정렬 기준 -->
         <choose>
