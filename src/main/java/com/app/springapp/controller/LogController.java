@@ -62,10 +62,11 @@ public class LogController {
     }
 
     // 로그 작성
-    @Operation(summary = "로그 작성", description = "새 페일로그를 작성합니다.")
     @PostMapping
-    public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto) {
-        return ResponseEntity.ok(logService.createLog(dto, 1L)); // 로그인 구현 후 memberId 교체
+    public ResponseEntity<ApiResponseDTO> createLog(@RequestBody LogCreateRequestDTO dto,
+                                                    Authentication authentication) {
+        MemberDTO memberDTO = (MemberDTO) authentication.getPrincipal();
+        return ResponseEntity.ok(logService.createLog(dto, memberDTO.getId()));
     }
 
     // 로그 상세 조회
@@ -73,6 +74,13 @@ public class LogController {
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponseDTO> getLog(@PathVariable Long id) {
         return ResponseEntity.ok(logService.getLog(id));
+    }
+
+    // 인기 솔루션 조회 (좋아요 10개 이상, 로그 목록 페이지 노출용)
+    @Operation(summary = "인기 솔루션 조회", description = "좋아요 10개 이상인 로그의 분석 결과를 반환합니다.")
+    @GetMapping("/popular-solutions")
+    public ResponseEntity<ApiResponseDTO> getPopularSolutions() {
+        return ResponseEntity.ok(logService.getPopularSolutions());
     }
 
 
