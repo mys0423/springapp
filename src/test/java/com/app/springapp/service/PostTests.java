@@ -72,4 +72,9 @@ public class PostTests {
     public void findPostTest() {
         log.info("{}", postService.findPost(1L));
     }
+
+    @Test
+    public void deletePostTest() {
+        postService.deletePost(28L);
+    }
 }

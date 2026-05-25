@@ -35,4 +35,7 @@ public interface PostMapper {
 
     //게시글 조회수 증가
     public void updatePostReadCount(Long id);
+
+    //게시글 삭제
+    public void delete(Long id);
 }

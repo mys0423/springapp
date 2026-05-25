@@ -59,4 +59,9 @@ public class PostDAO {
     public void increaseReadCount(Long postId) {
         postMapper.updatePostReadCount(postId);
     }
+
+    //게시글 삭제
+    public void delete(Long postId) {
+        postMapper.delete(postId);
+    }
 }

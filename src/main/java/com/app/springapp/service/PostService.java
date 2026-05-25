@@ -35,4 +35,7 @@ public interface PostService {
 
     //게시글 조회수 증가
     public void increaseReadCount(Long postId);
+
+    //게시글 삭제
+    public void deletePost(Long postId);
 }

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PostServiceImpl implements PostService {
 
     private final PostDAO postDAO;
+    private final PostLikeService postLikeService;
     private final ReplyService replyService;
     private final PostPictureService postPictureService;
 
@@ -97,5 +98,18 @@ public class PostServiceImpl implements PostService {
     @Override
     public void increaseReadCount(Long postId) {
         postDAO.increaseReadCount(postId);
+    }
+
+    //게시글 삭제
+    @Override
+    public void deletePost(Long postId) {
+        //게시글 모든 좋아요 삭제
+        postLikeService.cancelPostLikeAll(postId);
+
+        //게시글에 달린 모든 댓글 삭제
+        replyService.deleteReplies(postId);
+
+        //게시글 삭제
+        postDAO.delete(postId);
     }
 }
