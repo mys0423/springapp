@@ -55,6 +55,7 @@ public class PostServiceImpl implements PostService {
         return postDAO.findById(postReadRequestDTO).orElseThrow(() -> new PostException("게시글을 찾을 수 없습니다.", HttpStatus.NOT_FOUND));
     }
 
+    //id로 게시글 검색
     @Override
     public PostVO findPost(Long id) {
         return postDAO.find(id).orElseThrow(() -> new PostException("게시글을 찾지 못했습니다.", HttpStatus.NOT_FOUND));
