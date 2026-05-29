@@ -6,6 +6,7 @@ import com.app.springapp.domain.dto.request.PostUpdateRequestDTO;
 import com.app.springapp.domain.dto.response.*;
 import com.app.springapp.domain.vo.PostVO;
 import com.app.springapp.exception.PostException;
+import com.app.springapp.repository.LogDAO;
 import com.app.springapp.repository.PostDAO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +26,8 @@ public class PostServiceImpl implements PostService {
     private final PostDAO postDAO;
     private final PostLikeService postLikeService;
     private final ReplyService replyService;
-    private final PostPictureService postPictureService;
+
+    private final LogDAO logDAO;
 
     //검색 결과 만족하는 게시글 리스트로 반환
     @Override
@@ -107,14 +109,14 @@ public class PostServiceImpl implements PostService {
 
         postReadResponseDTO.setPost(findPost(postReadRequestDTO));  //게시글 정보 저장
         postReadResponseDTO.setReplies(replyService.getPostReplies(postReadRequestDTO));    //게시글에 달린 댓글 정보(대댓글포함) 저장
-//        postReadResponseDTO.setPostPictures(postPictureService.findAll(postReadRequestDTO.getPostId()));    //게시글 첨부 이미지 목록 저장
         postReadResponseDTO.setBeforePost(findBeforePost(postReadRequestDTO.getPostId()));  //이전글 정보 저장
         postReadResponseDTO.setAfterPost(findAfterPost(postReadRequestDTO.getPostId()));    //다음글 정보 저장
 
         Long memberId = postReadResponseDTO.getPost().getMemberId();
 
-        postReadResponseDTO.setMemberPostCount(countPost(memberId));
-        postReadResponseDTO.setMemberReplyCount(replyService.countReply(memberId));
+        postReadResponseDTO.setMemberPostCount(countPost(memberId));    //해당 멤버의 게시글 갯수
+        postReadResponseDTO.setMemberLogCount(logDAO.findAllByMemberId(memberId).toArray().length); //해당 멤버의 로그갯수
+        postReadResponseDTO.setMemberReplyCount(replyService.countReply(memberId)); //해당 멤버의 댓글 갯수
 
         //게시글 조회수 증가
         increaseReadCount(postReadRequestDTO.getPostId());
